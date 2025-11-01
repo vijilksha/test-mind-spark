@@ -26,13 +26,17 @@ export const Hero = () => {
         </p>
         
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button size="lg" className="gap-2 shadow-glow">
-            <BookOpen className="w-5 h-5" />
-            Start Learning
+          <Button size="lg" className="gap-2 shadow-glow" asChild>
+            <a href="#notes">
+              <BookOpen className="w-5 h-5" />
+              Start Learning
+            </a>
           </Button>
-          <Button size="lg" variant="secondary" className="gap-2">
-            <Code2 className="w-5 h-5" />
-            View Examples
+          <Button size="lg" variant="secondary" className="gap-2" asChild>
+            <a href="#examples">
+              <Code2 className="w-5 h-5" />
+              View Examples
+            </a>
           </Button>
         </div>
       </div>

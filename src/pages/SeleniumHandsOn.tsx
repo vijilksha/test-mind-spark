@@ -49,6 +49,121 @@ public class GoogleSearchTest {
         // TODO: Close the browser
     }
 }`}
+                aiExampleCode={`import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import com.google.gson.Gson;
+import okhttp3.*;
+import java.io.IOException;
+
+/**
+ * AI-Enhanced Selenium Test with Self-Healing Locators
+ * Uses Gemini AI to automatically suggest alternative locators when elements fail
+ */
+public class AIEnhancedGoogleSearch {
+    private static final String GEMINI_API_KEY = "your-gemini-api-key";
+    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
+    
+    public static void main(String[] args) {
+        WebDriver driver = new ChromeDriver();
+        
+        try {
+            driver.get("https://www.google.com");
+            
+            // Try to find search box with AI-powered fallback
+            WebElement searchBox = findElementWithAI(driver, 
+                By.name("q"), 
+                "search input box on Google homepage");
+            
+            if (searchBox != null) {
+                searchBox.sendKeys("Selenium WebDriver");
+                searchBox.submit();
+                System.out.println("✓ Search completed successfully!");
+            } else {
+                System.out.println("✗ Failed to find search box even with AI help");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+    }
+    
+    /**
+     * AI-powered element finder that suggests alternatives when primary locator fails
+     */
+    private static WebElement findElementWithAI(WebDriver driver, By primaryLocator, String elementDescription) {
+        try {
+            // Try primary locator first
+            return driver.findElement(primaryLocator);
+        } catch (Exception e) {
+            System.out.println("⚠ Primary locator failed, consulting AI...");
+            
+            // Get page source and ask AI for alternative locators
+            String pageSource = driver.getPageSource();
+            String aiSuggestion = askAIForLocator(pageSource, elementDescription);
+            
+            System.out.println("🤖 AI suggested: " + aiSuggestion);
+            
+            // Try AI-suggested locator
+            try {
+                return driver.findElement(By.cssSelector(aiSuggestion));
+            } catch (Exception e2) {
+                System.out.println("✗ AI suggestion also failed");
+                return null;
+            }
+        }
+    }
+    
+    private static String askAIForLocator(String pageSource, String elementDescription) {
+        OkHttpClient client = new OkHttpClient();
+        
+        String prompt = String.format(
+            "Given this HTML snippet, suggest a CSS selector for: %s\\n\\nHTML: %s\\n\\nReturn ONLY the CSS selector, nothing else.",
+            elementDescription,
+            pageSource.substring(0, Math.min(2000, pageSource.length()))
+        );
+        
+        String jsonBody = String.format(
+            "{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}",
+            prompt.replace("\\n", "\\\\n").replace("\\"", "\\\\\\"")
+        );
+        
+        Request request = new Request.Builder()
+            .url(GEMINI_API_URL + "?key=" + GEMINI_API_KEY)
+            .post(RequestBody.create(jsonBody, MediaType.parse("application/json")))
+            .build();
+        
+        try {
+            Response response = client.newCall(request).execute();
+            String responseBody = response.body().string();
+            
+            // Parse JSON response and extract suggested selector
+            Gson gson = new Gson();
+            GeminiResponse geminiResponse = gson.fromJson(responseBody, GeminiResponse.class);
+            return geminiResponse.candidates[0].content.parts[0].text.trim();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "input[type='text']"; // Fallback selector
+        }
+    }
+    
+    // Helper class for JSON parsing
+    static class GeminiResponse {
+        Candidate[] candidates;
+        static class Candidate {
+            Content content;
+            static class Content {
+                Part[] parts;
+                static class Part {
+                    String text;
+                }
+            }
+        }
+    }
+}`}
               />
 
               <HandsOnExercise
@@ -127,6 +242,112 @@ public class DynamicContentTest {
                 level="intermediate"
                 tool="selenium"
                 exercisePrompt="Create a Java test that captures screenshots at different stages, uses AI to compare them with baseline images, and detects visual differences. Integrate with an AI API for image comparison."
+                aiExampleCode={`import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Base64;
+import okhttp3.*;
+
+/**
+ * AI-Powered Visual Testing using Gemini Vision API
+ * Compares screenshots and detects visual changes using AI
+ */
+public class AIVisualTesting {
+    private static final String GEMINI_API_KEY = "your-gemini-api-key";
+    private static final String GEMINI_VISION_URL = 
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
+    
+    public static void main(String[] args) {
+        WebDriver driver = new ChromeDriver();
+        
+        try {
+            // Navigate to page
+            driver.get("https://example.com");
+            Thread.sleep(2000); // Wait for page load
+            
+            // Capture current screenshot
+            File currentScreenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+            
+            // Compare with baseline using AI
+            String baselinePath = "baseline_screenshot.png";
+            boolean hasVisualChanges = compareWithAI(baselinePath, currentScreenshot.getPath());
+            
+            if (hasVisualChanges) {
+                System.out.println("⚠ Visual differences detected!");
+            } else {
+                System.out.println("✓ No visual differences found");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+    }
+    
+    /**
+     * Uses Gemini Vision API to compare two screenshots
+     * Returns true if significant differences are found
+     */
+    private static boolean compareWithAI(String baselinePath, String currentPath) {
+        try {
+            // Convert images to base64
+            String baselineBase64 = imageToBase64(baselinePath);
+            String currentBase64 = imageToBase64(currentPath);
+            
+            // Ask AI to compare images
+            String prompt = "Compare these two screenshots and identify any visual differences. " +
+                          "Focus on layout changes, missing elements, color differences, or text changes. " +
+                          "Return 'DIFFERENT' if you find significant changes, or 'SAME' if they look identical.";
+            
+            String jsonBody = String.format(
+                "{" +
+                "  \\"contents\\": [{" +
+                "    \\"parts\\": [" +
+                "      {\\"text\\": \\"%s\\"}," +
+                "      {\\"inline_data\\": {\\"mime_type\\": \\"image/png\\", \\"data\\": \\"%s\\"}}," +
+                "      {\\"inline_data\\": {\\"mime_type\\": \\"image/png\\", \\"data\\": \\"%s\\"}}" +
+                "    ]" +
+                "  }]" +
+                "}",
+                prompt, baselineBase64, currentBase64
+            );
+            
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                .url(GEMINI_VISION_URL + "?key=" + GEMINI_API_KEY)
+                .post(RequestBody.create(jsonBody, MediaType.parse("application/json")))
+                .build();
+            
+            Response response = client.newCall(request).execute();
+            String responseBody = response.body().string();
+            
+            System.out.println("🤖 AI Analysis: " + extractAIResponse(responseBody));
+            
+            return responseBody.contains("DIFFERENT");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    private static String imageToBase64(String imagePath) throws IOException {
+        File imageFile = new File(imagePath);
+        byte[] imageBytes = java.nio.file.Files.readAllBytes(imageFile.toPath());
+        return Base64.getEncoder().encodeToString(imageBytes);
+    }
+    
+    private static String extractAIResponse(String jsonResponse) {
+        // Simple extraction - in production use proper JSON parsing
+        int start = jsonResponse.indexOf("\\"text\\":\\"") + 8;
+        int end = jsonResponse.indexOf("\\"", start);
+        return jsonResponse.substring(start, end);
+    }
+}`}
               />
             </TabsContent>
 

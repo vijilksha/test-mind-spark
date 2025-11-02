@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Lightbulb, CheckCircle, Code } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface HandsOnExerciseProps {
   title: string;
@@ -14,6 +15,7 @@ interface HandsOnExerciseProps {
   tool: "selenium" | "playwright" | "cypress";
   exercisePrompt: string;
   starterCode?: string;
+  aiExampleCode?: string;
 }
 
 export const HandsOnExercise = ({
@@ -22,7 +24,8 @@ export const HandsOnExercise = ({
   level,
   tool,
   exercisePrompt,
-  starterCode = ""
+  starterCode = "",
+  aiExampleCode = ""
 }: HandsOnExerciseProps) => {
   const [code, setCode] = useState(starterCode);
   const [aiResponse, setAiResponse] = useState("");
@@ -102,60 +105,94 @@ export const HandsOnExercise = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="p-4 bg-muted/50 rounded-lg">
-          <h4 className="font-semibold mb-2">📝 Exercise:</h4>
-          <p className="text-sm text-muted-foreground">{exercisePrompt}</p>
-        </div>
-
-        <div>
-          <label className="text-sm font-medium mb-2 block">Your Code:</label>
-          <Textarea
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder={`Write your ${tool} test code here...`}
-            className="font-mono text-sm min-h-[200px]"
-          />
-        </div>
-
-        <div className="flex gap-2 flex-wrap">
-          <Button
-            onClick={() => callAI("validate")}
-            disabled={loading || !code.trim()}
-            size="sm"
-          >
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
-            Validate with AI
-          </Button>
+        <Tabs defaultValue="exercise" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="exercise">Exercise</TabsTrigger>
+            <TabsTrigger value="ai-example">AI Automation Example</TabsTrigger>
+          </TabsList>
           
-          <Button
-            onClick={() => callAI("hint")}
-            disabled={loading}
-            variant="outline"
-            size="sm"
-          >
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lightbulb className="mr-2 h-4 w-4" />}
-            Get Hint
-          </Button>
-          
-          <Button
-            onClick={() => callAI("generate")}
-            disabled={loading}
-            variant="secondary"
-            size="sm"
-          >
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Code className="mr-2 h-4 w-4" />}
-            Show Solution
-          </Button>
-        </div>
+          <TabsContent value="exercise" className="space-y-4">
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <h4 className="font-semibold mb-2">📝 Exercise:</h4>
+              <p className="text-sm text-muted-foreground">{exercisePrompt}</p>
+            </div>
 
-        {aiResponse && (
-          <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-            <h4 className="font-semibold mb-2 flex items-center gap-2">
-              <span className="text-primary">🤖 AI Feedback:</span>
-            </h4>
-            <div className="text-sm whitespace-pre-wrap">{aiResponse}</div>
-          </div>
-        )}
+            <div>
+              <label className="text-sm font-medium mb-2 block">Your Code:</label>
+              <Textarea
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder={`Write your ${tool} test code here...`}
+                className="font-mono text-sm min-h-[200px]"
+              />
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                onClick={() => callAI("validate")}
+                disabled={loading || !code.trim()}
+                size="sm"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
+                Validate with AI
+              </Button>
+              
+              <Button
+                onClick={() => callAI("hint")}
+                disabled={loading}
+                variant="outline"
+                size="sm"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lightbulb className="mr-2 h-4 w-4" />}
+                Get Hint
+              </Button>
+              
+              <Button
+                onClick={() => callAI("generate")}
+                disabled={loading}
+                variant="secondary"
+                size="sm"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Code className="mr-2 h-4 w-4" />}
+                Show Solution
+              </Button>
+            </div>
+
+            {aiResponse && (
+              <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                <h4 className="font-semibold mb-2 flex items-center gap-2">
+                  <span className="text-primary">🤖 AI Feedback:</span>
+                </h4>
+                <div className="text-sm whitespace-pre-wrap">{aiResponse}</div>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="ai-example" className="space-y-4">
+            <div className="p-4 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg border border-purple-500/20">
+              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                <Code className="h-5 w-5 text-purple-500" />
+                <span>AI-Powered Automation Example</span>
+              </h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                This example shows how to integrate AI into your test automation to make tests more intelligent and self-healing.
+              </p>
+            </div>
+            
+            {aiExampleCode ? (
+              <Textarea
+                value={aiExampleCode}
+                readOnly
+                className="font-mono text-sm min-h-[400px] bg-muted/50"
+              />
+            ) : (
+              <div className="p-8 text-center text-muted-foreground">
+                <Code className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>AI automation example coming soon for this exercise</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );

@@ -31,17 +31,24 @@ const SeleniumHandsOn = () => {
                 description="Learn to locate and interact with web elements"
                 level="beginner"
                 tool="selenium"
-                exercisePrompt="Create a Selenium script that opens Google, finds the search box, types 'Selenium WebDriver', and clicks the search button. Use proper waits and handle exceptions."
-                starterCode={`from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+                exercisePrompt="Create a Selenium Java script that opens Google, finds the search box, types 'Selenium WebDriver', and clicks the search button. Use proper waits and handle exceptions."
+                starterCode={`import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
-# TODO: Initialize the webdriver
-# TODO: Navigate to Google
-# TODO: Find and interact with search box
-# TODO: Submit search
-# TODO: Close the browser`}
+public class GoogleSearchTest {
+    public static void main(String[] args) {
+        // TODO: Initialize ChromeDriver
+        // TODO: Navigate to Google
+        // TODO: Find and interact with search box
+        // TODO: Submit search
+        // TODO: Close the browser
+    }
+}`}
               />
 
               <HandsOnExercise
@@ -49,18 +56,26 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Practice filling forms and validating results"
                 level="beginner"
                 tool="selenium"
-                exercisePrompt="Create a test that fills out a registration form (name, email, password) on a sample website, submits it, and validates the success message appears."
-                starterCode={`from selenium import webdriver
-from selenium.webdriver.common.by import By
+                exercisePrompt="Create a Java test that fills out a registration form (name, email, password) on a sample website, submits it, and validates the success message appears."
+                starterCode={`import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-driver = webdriver.Chrome()
-
-# TODO: Navigate to form page
-# TODO: Fill in name field
-# TODO: Fill in email field
-# TODO: Fill in password field
-# TODO: Click submit button
-# TODO: Assert success message appears`}
+public class FormFillTest {
+    public static void main(String[] args) {
+        WebDriver driver = new ChromeDriver();
+        
+        // TODO: Navigate to form page
+        // TODO: Fill in name field
+        // TODO: Fill in email field
+        // TODO: Fill in password field
+        // TODO: Click submit button
+        // TODO: Assert success message appears
+        
+        driver.quit();
+    }
+}`}
               />
 
               <HandsOnExercise
@@ -68,7 +83,7 @@ driver = webdriver.Chrome()
                 description="Work with lists of elements"
                 level="beginner"
                 tool="selenium"
-                exercisePrompt="Write a script that finds all links on a webpage, prints their text and href attributes, and counts how many external links exist (links starting with http)."
+                exercisePrompt="Write a Java script that finds all links on a webpage, prints their text and href attributes, and counts how many external links exist (links starting with http)."
               />
             </TabsContent>
 
@@ -78,17 +93,24 @@ driver = webdriver.Chrome()
                 description="Master waiting strategies for dynamic content"
                 level="intermediate"
                 tool="selenium"
-                exercisePrompt="Create a test that handles AJAX-loaded content. Wait for specific elements to appear after a button click, handle loading states, and validate the dynamically loaded content."
-                starterCode={`from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+                exercisePrompt="Create a Java test that handles AJAX-loaded content. Wait for specific elements to appear after a button click, handle loading states, and validate the dynamically loaded content."
+                starterCode={`import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
-# TODO: Set up explicit waits
-# TODO: Click button that triggers AJAX
-# TODO: Wait for loading indicator to disappear
-# TODO: Wait for content to appear
-# TODO: Validate content`}
+public class DynamicContentTest {
+    public static void main(String[] args) {
+        // TODO: Set up explicit waits
+        // TODO: Click button that triggers AJAX
+        // TODO: Wait for loading indicator to disappear
+        // TODO: Wait for content to appear
+        // TODO: Validate content
+    }
+}`}
               />
 
               <HandsOnExercise
@@ -96,7 +118,7 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Structure tests using POM design pattern"
                 level="intermediate"
                 tool="selenium"
-                exercisePrompt="Implement a Page Object Model for a login page. Create a LoginPage class with methods for entering credentials, submitting, and validating login success or error messages."
+                exercisePrompt="Implement a Page Object Model in Java for a login page. Create a LoginPage class with methods for entering credentials, submitting, and validating login success or error messages."
               />
 
               <HandsOnExercise
@@ -104,7 +126,7 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Integrate AI for visual regression testing"
                 level="intermediate"
                 tool="selenium"
-                exercisePrompt="Create a test that captures screenshots at different stages, uses AI to compare them with baseline images, and detects visual differences. Integrate with an AI API for image comparison."
+                exercisePrompt="Create a Java test that captures screenshots at different stages, uses AI to compare them with baseline images, and detects visual differences. Integrate with an AI API for image comparison."
               />
             </TabsContent>
 
@@ -114,7 +136,7 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Implement intelligent element location"
                 level="advanced"
                 tool="selenium"
-                exercisePrompt="Build a self-healing locator system that uses AI to automatically find elements when original locators fail. When a locator breaks, capture the page context and use AI to suggest alternative locators."
+                exercisePrompt="Build a self-healing locator system in Java that uses AI to automatically find elements when original locators fail. When a locator breaks, capture the page context and use AI to suggest alternative locators."
               />
 
               <HandsOnExercise
@@ -122,7 +144,7 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Run tests in parallel with AI-driven test selection"
                 level="advanced"
                 tool="selenium"
-                exercisePrompt="Create a parallel test execution framework using Selenium Grid. Implement an AI layer that analyzes test history and code changes to intelligently select which tests to run in each execution."
+                exercisePrompt="Create a parallel test execution framework in Java using Selenium Grid and TestNG. Implement an AI layer that analyzes test history and code changes to intelligently select which tests to run in each execution."
               />
 
               <HandsOnExercise
@@ -130,7 +152,7 @@ from selenium.webdriver.support import expected_conditions as EC
                 description="Generate test cases using AI"
                 level="advanced"
                 tool="selenium"
-                exercisePrompt="Build a system that takes user stories or requirements as input and uses AI to generate complete Selenium test scripts, including locators, test data, and assertions."
+                exercisePrompt="Build a Java system that takes user stories or requirements as input and uses AI to generate complete Selenium test scripts, including locators, test data, and assertions."
               />
             </TabsContent>
           </Tabs>

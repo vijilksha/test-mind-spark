@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Code2, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -10,7 +11,7 @@ export const Hero = () => {
       <div className="container relative z-10 px-4 py-16 mx-auto text-center animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-accent/50 backdrop-blur-sm">
           <Sparkles className="w-4 h-4 text-accent-foreground" />
-          <span className="text-sm font-medium text-accent-foreground">Master AI Testing</span>
+          <span className="text-sm font-medium text-accent-foreground">Master AI Testing with Gemini</span>
         </div>
         
         <h1 className="mb-6 text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl">
@@ -21,8 +22,8 @@ export const Hero = () => {
         </h1>
         
         <p className="max-w-2xl mx-auto mb-8 text-lg text-gray-200 md:text-xl">
-          Comprehensive notes and strategies to transform your testing workflow with artificial intelligence.
-          From fundamentals to advanced automation techniques.
+          Learn testing automation from beginner to advanced with AI-powered hands-on exercises.
+          Practice Selenium, Playwright, and Cypress with real-time AI guidance.
         </p>
         
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -33,10 +34,10 @@ export const Hero = () => {
             </a>
           </Button>
           <Button size="lg" variant="secondary" className="gap-2" asChild>
-            <a href="#examples">
+            <Link to="/selenium-hands-on">
               <Code2 className="w-5 h-5" />
-              View Examples
-            </a>
+              Hands-On Exercises
+            </Link>
           </Button>
         </div>
       </div>

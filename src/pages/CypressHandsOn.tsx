@@ -18,6 +18,155 @@ const CypressHandsOn = () => {
             </p>
           </div>
 
+          <Card className="border-primary/20 bg-card/50 backdrop-blur">
+            <CardContent className="pt-6 space-y-4">
+              <h2 className="text-2xl font-bold text-primary">📋 Cypress Configuration Guide</h2>
+              
+              <div className="space-y-4 text-sm">
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">cypress.config.js - Main Configuration File</h3>
+                  <p className="text-muted-foreground mb-3">
+                    The cypress.config.js file is the central configuration file for your Cypress project. It defines test behavior, browser settings, and custom tasks.
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2">
+                    <div className="text-primary font-semibold">// cypress.config.js</div>
+                    <pre className="whitespace-pre-wrap">{`const { defineConfig } = require('cypress');
+
+module.exports = defineConfig({
+  e2e: {
+    // Base URL for cy.visit() commands
+    baseUrl: 'http://localhost:3000',
+    
+    // Viewport dimensions
+    viewportWidth: 1280,
+    viewportHeight: 720,
+    
+    // Test execution settings
+    defaultCommandTimeout: 10000,
+    pageLoadTimeout: 30000,
+    
+    // Video and screenshot settings
+    video: true,
+    screenshotOnRunFailure: true,
+    
+    // Environment variables (accessible via Cypress.env())
+    env: {
+      apiUrl: 'https://api.example.com',
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY
+    },
+    
+    // Setup for Node.js tasks
+    setupNodeEvents(on, config) {
+      // Register custom tasks here
+      on('task', {
+        log(message) {
+          console.log(message);
+          return null;
+        }
+      });
+      
+      return config;
+    }
+  }
+});`}</pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">🔧 Key Configuration Options</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li><span className="text-foreground font-medium">baseUrl:</span> Default URL for cy.visit() - saves typing full URLs</li>
+                    <li><span className="text-foreground font-medium">viewportWidth/Height:</span> Default browser viewport size</li>
+                    <li><span className="text-foreground font-medium">defaultCommandTimeout:</span> How long to wait for commands (default: 4000ms)</li>
+                    <li><span className="text-foreground font-medium">pageLoadTimeout:</span> How long to wait for page loads (default: 60000ms)</li>
+                    <li><span className="text-foreground font-medium">video:</span> Record video of test execution (true/false)</li>
+                    <li><span className="text-foreground font-medium">env:</span> Environment variables accessible via Cypress.env()</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">🤖 AI Integration with setupNodeEvents</h3>
+                  <p className="text-muted-foreground mb-3">
+                    Use setupNodeEvents to register custom tasks that can call external APIs (like Gemini) from your tests:
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2">
+                    <pre className="whitespace-pre-wrap">{`setupNodeEvents(on, config) {
+  const fetch = require('node-fetch');
+  
+  on('task', {
+    async callGeminiAPI({ prompt }) {
+      const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+      const url = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=\${GEMINI_API_KEY}\`;
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+      
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
+    }
+  });
+  
+  return config;
+}`}</pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">🔐 Environment Variables</h3>
+                  <p className="text-muted-foreground mb-3">
+                    Store sensitive data like API keys in environment variables:
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-3">
+                    <div>
+                      <div className="text-primary font-semibold mb-1">Method 1: .env file (requires cypress-dotenv plugin)</div>
+                      <pre className="whitespace-pre-wrap">{`// .env
+GEMINI_API_KEY=your_api_key_here`}</pre>
+                    </div>
+                    
+                    <div>
+                      <div className="text-primary font-semibold mb-1">Method 2: System environment variables</div>
+                      <pre className="whitespace-pre-wrap">{`// Terminal
+export GEMINI_API_KEY=your_api_key_here
+npx cypress run`}</pre>
+                    </div>
+                    
+                    <div>
+                      <div className="text-primary font-semibold mb-1">Method 3: cypress.config.js env object</div>
+                      <pre className="whitespace-pre-wrap">{`env: {
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY
+}`}</pre>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">📁 Project Structure</h3>
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs">
+                    <pre className="whitespace-pre-wrap">{`cypress/
+├── e2e/                  # Test files (.cy.js)
+├── fixtures/             # Test data (JSON files)
+├── support/
+│   ├── commands.js      # Custom commands
+│   └── e2e.js          # Runs before every test
+├── downloads/           # Downloaded files
+├── screenshots/         # Test failure screenshots
+└── videos/             # Test run videos
+cypress.config.js        # Main configuration
+package.json            # Dependencies`}</pre>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <Tabs defaultValue="beginner" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="beginner">Beginner</TabsTrigger>

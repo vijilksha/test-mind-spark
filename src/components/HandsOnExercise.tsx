@@ -89,7 +89,7 @@ export const HandsOnExercise = ({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden [box-shadow:var(--shadow-card)]">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -112,7 +112,7 @@ export const HandsOnExercise = ({
           </TabsList>
           
           <TabsContent value="exercise" className="space-y-4">
-            <div className="p-4 bg-muted/50 rounded-lg">
+            <div className="p-4 bg-muted/50 rounded-lg [box-shadow:var(--shadow-code)]">
               <h4 className="font-semibold mb-2">📝 Exercise:</h4>
               <p className="text-sm text-muted-foreground">{exercisePrompt}</p>
             </div>
@@ -159,7 +159,7 @@ export const HandsOnExercise = ({
             </div>
 
             {aiResponse && (
-              <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+              <div className="p-4 bg-primary/5 rounded-lg border border-primary/20 [box-shadow:var(--shadow-code)]">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
                   <span className="text-primary">🤖 AI Feedback:</span>
                 </h4>
@@ -169,7 +169,7 @@ export const HandsOnExercise = ({
           </TabsContent>
           
           <TabsContent value="ai-example" className="space-y-4">
-            <div className="p-4 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg border border-purple-500/20">
+            <div className="p-4 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg border border-purple-500/20 [box-shadow:var(--shadow-code)]">
               <h4 className="font-semibold mb-2 flex items-center gap-2">
                 <Code className="h-5 w-5 text-purple-500" />
                 <span>AI-Powered Automation Example</span>

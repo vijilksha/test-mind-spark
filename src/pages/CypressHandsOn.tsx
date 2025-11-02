@@ -18,7 +18,7 @@ const CypressHandsOn = () => {
             </p>
           </div>
 
-          <Card className="border-primary/20 bg-card/50 backdrop-blur">
+          <Card className="border-primary/20 bg-card/50 backdrop-blur [box-shadow:var(--shadow-card)]">
             <CardContent className="pt-6 space-y-4">
               <h2 className="text-2xl font-bold text-primary">📋 Cypress Configuration Guide</h2>
               
@@ -29,7 +29,7 @@ const CypressHandsOn = () => {
                     The cypress.config.js file is the central configuration file for your Cypress project. It defines test behavior, browser settings, and custom tasks.
                   </p>
                   
-                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2">
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2 [box-shadow:var(--shadow-code)]">
                     <div className="text-primary font-semibold">// cypress.config.js</div>
                     <pre className="whitespace-pre-wrap">{`const { defineConfig } = require('cypress');
 
@@ -91,7 +91,7 @@ module.exports = defineConfig({
                     Use setupNodeEvents to register custom tasks that can call external APIs (like Gemini) from your tests:
                   </p>
                   
-                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2">
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-2 [box-shadow:var(--shadow-code)]">
                     <pre className="whitespace-pre-wrap">{`setupNodeEvents(on, config) {
   const fetch = require('node-fetch');
   
@@ -124,7 +124,7 @@ module.exports = defineConfig({
                     Store sensitive data like API keys in environment variables:
                   </p>
                   
-                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-3">
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs space-y-3 [box-shadow:var(--shadow-code)]">
                     <div>
                       <div className="text-primary font-semibold mb-1">Method 1: .env file (requires cypress-dotenv plugin)</div>
                       <pre className="whitespace-pre-wrap">{`// .env
@@ -149,7 +149,7 @@ npx cypress run`}</pre>
 
                 <div>
                   <h3 className="font-semibold text-lg mb-2">📁 Project Structure</h3>
-                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs">
+                  <div className="bg-muted/50 p-4 rounded-lg font-mono text-xs [box-shadow:var(--shadow-code)]">
                     <pre className="whitespace-pre-wrap">{`cypress/
 ├── e2e/                  # Test files (.cy.js)
 ├── fixtures/             # Test data (JSON files)
